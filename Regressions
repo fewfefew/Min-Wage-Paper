@@ -1,0 +1,12 @@
+Simple Regressions:
+RStudio
+Must use fixest package
+
+1. Relationship between increase in minimum wage and annual average employment, controlling for variance in firm count:
+feols(log(annual_avg_emplvl) ~ log(value) + log(annual_avg_estabs_count) | State + year, panel.id = c("State", "year"), data = bigdata)
+
+2. Relationship between increase in minimum wage and annual taxable wages:
+feols(log(taxable_annual_wages) ~ log(value) | State + year, panel.id = c("State","year"), data = bigdata)
+
+3. Relationship between increase in minimum wage and establishment count: 
+feols(log(annual_avg_estabs_count) ~ log(value) | State + year, panel.id = c("State","year"), data = bigdata)
