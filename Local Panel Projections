@@ -1,7 +1,7 @@
 Local Panel Projections: Horizons are in years, with a confidence interval of 90%
 RStudio
 Must use 'plm' and 'ggplot2' package (may need other packages too)
-
+The 'value' variable is the minimum wage for each state
 
   1. Local Projection A: Relationship between an increase in minimum wage and annual average employment while controlling for variances in firm count
 
