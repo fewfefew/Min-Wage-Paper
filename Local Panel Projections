@@ -1,2 +1,102 @@
-Local Panel Projections:
-Must use 'plm' package (may need other packages too)
+Local Panel Projections: Horizons are in years, with a confidence interval of 90%
+RStudio
+Must use 'plm' and 'ggplot2' package (may need other packages too)
+
+
+  1. Local Projection A: Relationship between an increase in minimum wage and annual average employment while controlling for variances in firm count
+
+equipdt <- data.frame(matrix(ncol=4,nrow=6, dimnames=list(NULL, c("horizon","coeflb", "coef", "coefub"))))
+for(i in 1:nrow(equipdt)){
+  jj = feols(f(log(annual_avg_emplvl),i-1)-l(log(annual_avg_emplvl),1) ~ 1 + log(value) + log(annual_avg_estabs_count) | State + year , panel.id = c("State", "year"), data = bigdata)  
+  equipdt$horizon[i] = i
+  equipdt$coeflb[i] = confint(jj,level = 0.9)[1,1]
+  equipdt$coef[i] = jj$coeftable[1,1] 
+  equipdt$coefub[i] = confint(jj,level = 0.9)[1,2]
+}
+equipdt
+
+p <- ggplot(data = equipdt, aes(x = horizon)) + 
+  geom_line(aes(y = coef), color = "blue", size = 1) +
+  geom_line(aes(y = coeflb), linetype = "dashed", color = "blue") + 
+  geom_line(aes(y = coefub), linetype = "dashed", color = "blue") +
+  geom_point(aes(y = coef), color = "blue", size = 3) +  # Points on the main line
+  geom_hline(yintercept = 0, color = "black") +
+  labs(title = "Local Projection A: Annual Avg Employment",
+       x = "Horizon (years)", y = "Annual Avg Employment") +
+  theme_minimal() + 
+  theme(
+    axis.text = element_text(color = "black"),
+    text = element_text(size = 18, color = "black", family = "Arial"), 
+    panel.background = element_rect(fill = "white"),
+    panel.border = element_rect(color = "black", fill = NA),
+    plot.title = element_text(hjust = 1.01)
+  )
+
+p
+
+
+
+  2. Local Projection B: Minimum wage and taxable annual wages 
+
+equipdt <- data.frame(matrix(ncol=4,nrow=6, dimnames=list(NULL, c("horizon","coeflb", "coef", "coefub"))))
+for(i in 1:nrow(equipdt)){
+  jj = feols(f(log(taxable_annual_wages),i-1)-l(log(taxable_annual_wages),1) ~ 1 + log(value) | State + year , panel.id = c("State", "year"), data = bigdata)
+  equipdt$horizon[i] = i
+  equipdt$coeflb[i] = confint(jj,level = 0.9)[1,1]
+  equipdt$coef[i] = jj$coeftable[1,1] 
+  equipdt$coefub[i] = confint(jj,level = 0.9)[1,2]
+}
+equipdt
+
+p <- ggplot(data = equipdt, aes(x = horizon)) + 
+  geom_line(aes(y = coef), color = "blue", size = 1) +
+  geom_line(aes(y = coeflb), linetype = "dashed", color = "blue") + 
+  geom_line(aes(y = coefub), linetype = "dashed", color = "blue") +
+  geom_point(aes(y = coef), color = "blue", size = 3) +  # Points on the main line
+  geom_hline(yintercept = 0, color = "black") +
+  labs(title = "Local Projection B: Taxable Annual Wages",
+       x = "Horizon (years)", y = "Taxable Annual Wages") +
+  theme_minimal() + 
+  theme(
+    axis.text = element_text(color = "black"),
+    text = element_text(size = 18, color = "black", family = "Arial"), 
+    panel.background = element_rect(fill = "white"),
+    panel.border = element_rect(color = "black", fill = NA),
+    plot.title = element_text(hjust = 1.01)
+  )
+
+p
+
+
+
+  3. Local Projection C: Minimum wage and the annual average firm count 
+
+equipdt <- data.frame(matrix(ncol=4,nrow=6, dimnames=list(NULL, c("horizon","coeflb", "coef", "coefub"))))
+for(i in 1:nrow(equipdt)){
+  jj = feols(f(log(annual_avg_estabs_count),i-1)-l(log(annual_avg_estabs_count),1) ~ 1 + log(value) | State + year , panel.id = c("State", "year"), data = bigdata)
+  equipdt$horizon[i] = i
+  equipdt$coeflb[i] = confint(jj,level = 0.9)[1,1]
+  equipdt$coef[i] = jj$coeftable[1,1] 
+  equipdt$coefub[i] = confint(jj,level = 0.9)[1,2]
+}
+equipdt
+
+p <- ggplot(data = equipdt, aes(x = horizon)) + 
+  geom_line(aes(y = coef), color = "blue", size = 1) +
+  geom_line(aes(y = coeflb), linetype = "dashed", color = "blue") + 
+  geom_line(aes(y = coefub), linetype = "dashed", color = "blue") +
+  geom_point(aes(y = coef), color = "blue", size = 3) +  # Points on the main line
+  geom_hline(yintercept = 0, color = "black") +
+  labs(title = "Local Projection C: Annual Avg Firm Count",
+       x = "Horizon (years)", y = "Annual Avg Firm Count") +
+  theme_minimal() + 
+  theme(
+    axis.text = element_text(color = "black"),
+    text = element_text(size = 18, color = "black", family = "Arial"), 
+    panel.background = element_rect(fill = "white"),
+    panel.border = element_rect(color = "black", fill = NA),
+    plot.title = element_text(hjust = 1.01)
+  )
+
+p
+
